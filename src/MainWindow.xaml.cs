@@ -25,6 +25,7 @@ namespace daocCharacterManager
             InitializeComponent();
 
 	    CharacterManager.Initialize();
+	    CharacterManager.LoadClusterListFromHerald();
         }
 
 	private void menuExit_Click( object sender, RoutedEventArgs e ) {
