@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace src
+namespace daocCharacterManager
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,13 @@ namespace src
         public MainWindow()
         {
             InitializeComponent();
+
+	    CharacterManager.Initialize();
         }
+
+	private void menuExit_Click( object sender, RoutedEventArgs e ) {
+            Application.Current.Shutdown();
+        }
+
     }
 }
