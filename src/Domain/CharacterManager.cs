@@ -17,6 +17,25 @@ namespace daocCharacterManager {
             }
         }
 
+	public static void CreateCharacter( Character character ) {
+            string characterRootPath = Path.Combine( rootPath, character.Id );
+            string characterPath = Path.Combine( characterRootPath, "character.json" );
+
+
+            if( !Directory.Exists( characterRootPath ) ) {
+                Directory.CreateDirectory( characterRootPath );
+            }
+
+
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            System.IO.File.WriteAllText( characterPath, JsonSerializer.Serialize( character, options ) );
+        }
+
 	public static List<string> LoadClusterListFromHerald( ) {
 	    List<string> activeClusterList = new List<string>();		
             string url = "http://api.camelotherald.com/data/clusters/";
@@ -85,5 +104,27 @@ namespace daocCharacterManager {
 
 	    return foundCharacterList;
 	}
+
+	public static List<Character> LoadCharacterListFromDisk( ) {
+            List<Character> characterList = new List<Character>();
+
+            string[] directoryList;
+            directoryList = Directory.GetDirectories( rootPath );
+
+            foreach( string directory in directoryList ) {
+
+                string characterPath = Path.Combine( directory, "character.json" );
+
+                Character character;
+                try {
+                    character = JsonSerializer.Deserialize<Character>( File.ReadAllText( characterPath ) );
+                    characterList.Add( character );
+                } catch( Exception exception ) {
+                     MessageBox.Show( exception.ToString());
+                }
+            }
+	    return characterList;
+	}
+
     }
 }
