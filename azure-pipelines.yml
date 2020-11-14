@@ -42,7 +42,7 @@ steps:
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Agent.BuildDirectory)'
+    targetPath: '$(Agent.ReleaseDirectory)'
     artifact: 'Release'
     publishLocation: 'pipeline'
     
