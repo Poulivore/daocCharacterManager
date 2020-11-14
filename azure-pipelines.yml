@@ -46,7 +46,7 @@ steps:
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Agent.BuildDirectory)'
+    targetPath: '$(Build.ArtifactStagingDirectory)/Output'
     artifact: 'Release'
     publishLocation: 'pipeline'
     
