@@ -37,6 +37,8 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: '**/*.csproj'
+    outputDir: toto
+    
 
 
 
