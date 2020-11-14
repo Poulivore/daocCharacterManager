@@ -20,17 +20,29 @@ namespace daocCharacterManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<string> activeClusterList;
+
         public MainWindow()
         {
             InitializeComponent();
 
 	    CharacterManager.Initialize();
-	    CharacterManager.LoadClusterListFromHerald();
+	    activeClusterList = CharacterManager.LoadClusterListFromHerald();
+	    /*foreach( string data in activeClusterList ) {
+		    MessageBox.Show( data );
+	    }*/
         }
 
 	private void menuExit_Click( object sender, RoutedEventArgs e ) {
             Application.Current.Shutdown();
         }
+
+	private void menuImportCharacter_Click( object sender, RoutedEventArgs e ) {
+		Dialogs.DialogImportCharacter importCharacterDialog = new Dialogs.DialogImportCharacter( activeClusterList );
+
+		if(importCharacterDialog.ShowDialog() == true) {
+		}
+	}
 
     }
 }

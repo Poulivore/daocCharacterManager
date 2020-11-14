@@ -9,7 +9,7 @@
     <Grid>
         <Menu>
 	    <MenuItem Header="_File">
-	        <MenuItem Header="_Import character">
+	        <MenuItem Header="_Import character" Click="menuImportCharacter_Click">
 	        </MenuItem>
 		<Separator />
 	        <MenuItem Header="_Exit" Click="menuExit_Click">

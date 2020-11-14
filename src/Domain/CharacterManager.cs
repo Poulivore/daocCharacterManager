@@ -17,7 +17,8 @@ namespace daocCharacterManager {
             }
         }
 
-	public static void LoadClusterListFromHerald( ) {
+	public static List<string> LoadClusterListFromHerald( ) {
+	    List<string> activeClusterList = new List<string>();		
             string url = "http://api.camelotherald.com/data/clusters/";
 
 	    HttpClient http = new HttpClient();
@@ -38,16 +39,51 @@ namespace daocCharacterManager {
 
 			foreach( Json.ClusterDataJson clusterData in clusterDataListJson ) {
 				if( clusterData.archived_cluster == false ) {
-					MessageBox.Show( clusterData.cluster_name);
+					activeClusterList.Add( clusterData.cluster_name );
 				}
 			}
 		}
 
 	    } catch( Exception exception) {
 		MessageBox.Show(exception.ToString());
-
             }
 
+	    return activeClusterList;
+
+	}
+
+	public static List<Tuple<string, string>> SearchCharacterFromHerald( string name, string cluster ) {
+	    List<Tuple<string, string>> foundCharacterList = new List<Tuple<string, string>>();		
+            string url = "http://api.camelotherald.com/character/search?name=" + name + "&cluster=" + cluster;
+
+	     HttpClient http = new HttpClient();
+
+            try {
+                HttpContent responseMessage = http.GetAsync( url ).Result.Content;
+                var options = new JsonSerializerOptions
+                        {
+                            AllowTrailingCommas = true
+                        };
+
+
+                if( responseMessage != null ) {
+			string characterSearchResult = responseMessage.ReadAsStringAsync().Result;
+
+			Json.CharacterSearchResultJson characterSearchResultJson = new Json.CharacterSearchResultJson();
+
+			characterSearchResultJson = JsonSerializer.Deserialize<Json.CharacterSearchResultJson>( characterSearchResult, options );
+			foreach( Json.CharacterSearchResult result in characterSearchResultJson.results ) {
+				Tuple<string, string> tuple = new Tuple<string, string>(  result.character_web_id, result.name );
+				foundCharacterList.Add( tuple );
+			}
+		}
+
+	    } catch( Exception exception) {
+                MessageBox.Show(exception.ToString());
+            }
+
+
+	    return foundCharacterList;
 	}
     }
 }
