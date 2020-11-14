@@ -41,6 +41,8 @@ namespace daocCharacterManager
 		Dialogs.DialogImportCharacter importCharacterDialog = new Dialogs.DialogImportCharacter( activeClusterList );
 
 		if(importCharacterDialog.ShowDialog() == true) {
+			string characterId = importCharacterDialog.CharacterId;
+			MessageBox.Show(characterId);
 		}
 	}
 

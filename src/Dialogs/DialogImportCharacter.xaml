@@ -12,7 +12,7 @@
         <Label Grid.Column="1">Please enter your character name:</Label>
         <TextBox Name="characterNameTextBox" Grid.Column="1" Grid.Row="1" MinWidth="250">xXx</TextBox>
 	<Button Click="comboBoxFindCharacter_Click">Find character</Button>
-	<ComboBox Name="CharacterList" Width="100" DisplayMemberPath="Item2">
+	<ComboBox Name="CharacterList" Width="100" DisplayMemberPath="Item2" SelectedValuePath="Item1">
 	</ComboBox>
 
 	

@@ -4,9 +4,9 @@ using System.Windows;
 
 namespace daocCharacterManager.Dialogs
 {
-	public partial class DialogImportCharacter : Window
-	{
-        	public DialogImportCharacter( List<string> activeClusterList) {
+    public partial class DialogImportCharacter : Window
+    {
+        public DialogImportCharacter( List<string> activeClusterList) {
             		InitializeComponent();
 
 			ClusterList.ItemsSource = activeClusterList;
@@ -17,6 +17,11 @@ namespace daocCharacterManager.Dialogs
 		{
 			this.DialogResult = true;
 		}
+
+	public string CharacterId
+        {
+		get { return CharacterList.SelectedValue.ToString(); }
+        }
 
 	private void comboBoxFindCharacter_Click( object sender, RoutedEventArgs e ) {
 	
