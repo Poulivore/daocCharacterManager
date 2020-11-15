@@ -55,5 +55,6 @@ steps:
     tagSource: 'gitTag'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
+    gitHubConnection: Poulivore
 
 
