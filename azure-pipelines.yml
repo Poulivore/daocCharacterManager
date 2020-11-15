@@ -41,15 +41,19 @@ steps:
     zipAfterPublish: true
     modifyOutputPath: true
     
-
-
-
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/Output'
     artifact: 'Release'
     publishLocation: 'pipeline'
     
-
+- task: GitHubRelease@1
+  inputs:
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
 
 
