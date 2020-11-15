@@ -6,15 +6,67 @@
         xmlns:local="clr-namespace:daocCharacterManager"
         mc:Ignorable="d"
         Title="daocCharacterManager" Height="450" Width="800">
-    <Grid>
-        <Menu>
+	<Window.Resources>
+        <local:RealmPointsConverter x:Key="realmPointsConverter"></local:RealmPointsConverter>
+        <local:NextRealmRankConverter x:Key="nextRealmRankConverter"></local:NextRealmRankConverter>
+    </Window.Resources>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
 	    <MenuItem Header="_File">
-	        <MenuItem Header="_Import character">
+	        <MenuItem Header="_Import character" Click="menuImportCharacter_Click">
 	        </MenuItem>
 		<Separator />
 	        <MenuItem Header="_Exit" Click="menuExit_Click">
 	        </MenuItem>
 	    </MenuItem>
 	</Menu>
-    </Grid>
+	<TabControl Name="MainTabControl" DockPanel.Dock="Bottom">
+            <TabItem Header="General">
+                <ListView x:Name="characterListView"  GridViewColumnHeader.Click="CharacterListViewColumHeader_Click">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Header="Class"  DisplayMemberBinding="{Binding ClassName}"/>
+                            <GridViewColumn Header="Realm rank">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding RealmPoints, Converter={StaticResource realmPointsConverter}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Realm points">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding Path=RealmPoints, StringFormat='{}{0:N0}'}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Next realm rank">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Right" Text="{Binding Path=RealmPoints, StringFormat='{}{0:N0}', Converter={StaticResource nextRealmRankConverter}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Kills"  DisplayMemberBinding="{Binding TotalKills}"/>
+                            <GridViewColumn Header="Solo kills"  DisplayMemberBinding="{Binding TotalSoloKills}"/>
+                            <GridViewColumn Header="Server"  DisplayMemberBinding="{Binding ServerName}"/>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="View character" Click="OnViewCharacter"></MenuItem>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+            </TabItem>
+        </TabControl>
+
+    </DockPanel>
 </Window>
