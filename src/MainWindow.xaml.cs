@@ -29,7 +29,7 @@ namespace daocCharacterManager
 	private ObservableCollection<Character> characterList { get; set; }
 
 	GridViewColumnHeader _lastHeaderClicked = null;
-ListSortDirection _lastDirection = ListSortDirection.Ascending;
+	ListSortDirection _lastDirection = ListSortDirection.Ascending;
 
         public MainWindow()
         {
@@ -40,12 +40,7 @@ ListSortDirection _lastDirection = ListSortDirection.Ascending;
 
 	    characterList = new ObservableCollection<Character>(CharacterManager.LoadCharacterListFromDisk());
 
-	    foreach( Character character in characterList ) {
-                CharacterManager.UpdateCharacter( character );
-            }
-
-            characterListView.ItemsSource = characterList;
-
+	    RefreshCharacterList();
         }
 
 	private void menuExit_Click( object sender, RoutedEventArgs e ) {
@@ -104,6 +99,10 @@ ListSortDirection _lastDirection = ListSortDirection.Ascending;
                 }
 
 		}
+	}
+
+	private void menuRefreshCharacterList_Click( object sender, RoutedEventArgs e ) {
+	    RefreshCharacterList();
 	}
 
 	private void OnViewCharacter( object sender, RoutedEventArgs e ) {
@@ -173,5 +172,13 @@ ListSortDirection _lastDirection = ListSortDirection.Ascending;
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
         }
+
+	private void RefreshCharacterList() {
+	    foreach( Character character in characterList ) {
+                CharacterManager.UpdateCharacter( character );
+            }
+
+            characterListView.ItemsSource = characterList;
+	}
     }
 }
