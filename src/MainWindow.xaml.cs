@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -27,6 +28,9 @@ namespace daocCharacterManager
         List<string> activeClusterList;
 	private ObservableCollection<Character> characterList { get; set; }
 
+	GridViewColumnHeader _lastHeaderClicked = null;
+ListSortDirection _lastDirection = ListSortDirection.Ascending;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,7 +41,7 @@ namespace daocCharacterManager
 	    characterList = new ObservableCollection<Character>(CharacterManager.LoadCharacterListFromDisk());
 
 	    foreach( Character character in characterList ) {
-                //CharacterManager.UpdateCharacter( character );
+                CharacterManager.UpdateCharacter( character );
             }
 
             characterListView.ItemsSource = characterList;
@@ -83,6 +87,8 @@ namespace daocCharacterManager
                                 Character character = new Character( characterInfoJson.character_web_id, characterInfoJson.name, characterInfoJson.server_name, characterInfoJson.ClassName );
                                 character.RealmPoints = characterInfoJson.realm_war_stats.current.realm_points;
                                 character.ClassName = characterInfoJson.ClassName;
+                                character.TotalKills = characterInfoJson.realm_war_stats.current.player_kills.total.kills;
+                                character.TotalSoloKills = characterInfoJson.realm_war_stats.current.player_kills.total.solo_kills;
 
                                 CharacterManager.CreateCharacter( character );
 
@@ -101,6 +107,71 @@ namespace daocCharacterManager
 	}
 
 	private void OnViewCharacter( object sender, RoutedEventArgs e ) {
+		string characterName = "pouet";
+            Character character = (Character)characterListView.SelectedItems[0];
+            characterName = character.Name;
+
+
+            TabControl itemsTab = (TabControl) this.FindName("MainTabControl");
+            foreach(  TabItem item in itemsTab.Items ) {
+                if( item.Header == characterName ) {
+                    item.IsSelected = true;
+                    return;
+                }
+            }
+
+            TabItem newTab = new TabItem();
+            newTab.Header = characterName;
+
+            try {
+                CharacterWindow newChild = new CharacterWindow();
+                newTab.Content = newChild;
+            } catch( Exception exception ) {
+                MessageBox.Show( exception.ToString() );
+            }
+
+            itemsTab.Items.Add(newTab);
+
+            itemsTab.SelectedItem = newTab;
+
 	}
+
+	private void CharacterListViewColumHeader_Click( object sender, RoutedEventArgs e ) {
+	    GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+            ListSortDirection direction;
+
+            if (headerClicked != null) {
+      	        if (headerClicked.Role != GridViewColumnHeaderRole.Padding) {
+                    if (headerClicked != _lastHeaderClicked) {
+                        direction = ListSortDirection.Ascending;
+                    } else {
+             if (_lastDirection == ListSortDirection.Ascending)
+             {
+               direction = ListSortDirection.Descending;
+             }
+             else
+             {
+                 direction = ListSortDirection.Ascending;
+             }
+          }
+
+          string header = headerClicked.Column.Header as string;
+          Sort(header, direction);
+
+          _lastHeaderClicked = headerClicked;
+          _lastDirection = direction;
+       }
+    }
+	}
+
+	private void Sort(string sortBy, ListSortDirection direction) {
+            ICollectionView dataView =
+    CollectionViewSource.GetDefaultView(characterListView.ItemsSource);
+
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
+        }
     }
 }

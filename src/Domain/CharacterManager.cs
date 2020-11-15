@@ -36,6 +36,53 @@ namespace daocCharacterManager {
             System.IO.File.WriteAllText( characterPath, JsonSerializer.Serialize( character, options ) );
         }
 
+	public static void UpdateCharacter( Character character ) {
+            string url = "http://api.camelotherald.com/character/info/" + character.Id;
+
+            HttpClient http = new HttpClient();
+
+            try {
+                HttpContent responseMessage = http.GetAsync( url ).Result.Content;
+
+                if( responseMessage != null ) {
+                        string characterData = responseMessage.ReadAsStringAsync().Result;
+                        Json.ErrorJson errorJson = new Json.ErrorJson();
+                        var options = new JsonSerializerOptions
+                        {
+                            AllowTrailingCommas = true
+                        };
+
+                        try {
+                            errorJson = JsonSerializer.Deserialize<Json.ErrorJson>(characterData, options );
+                        } catch( Exception exception ) {
+                            MessageBox.Show( exception.ToString() );
+                        }
+
+                        if( errorJson.error != "" ) {
+                            MessageBox.Show( "Error : " + errorJson.error );
+                        } else {
+                            try {
+                                Json.CharacterInfoJson characterInfoJson = new Json.CharacterInfoJson();
+                                characterInfoJson = JsonSerializer.Deserialize<Json.CharacterInfoJson>(characterData, options );
+                                //Character character = new Character( characterInfoJson.character_web_id, characterInfoJson.name, characterInfoJson.server_name, characterInfoJson.ClassName );
+                                character.RealmPoints = characterInfoJson.realm_war_stats.current.realm_points;
+                                character.ClassName = characterInfoJson.ClassName;
+                                character.TotalKills = characterInfoJson.realm_war_stats.current.player_kills.total.kills;
+                                character.TotalSoloKills = characterInfoJson.realm_war_stats.current.player_kills.total.solo_kills;
+
+                                CharacterManager.CreateCharacter( character );
+
+                            } catch( Exception exception ) {
+                                MessageBox.Show( exception.ToString() );
+                            }
+                        }
+                    }
+            } catch( Exception exception) {
+
+            }
+        }
+
+
 	public static List<string> LoadClusterListFromHerald( ) {
 	    List<string> activeClusterList = new List<string>();		
             string url = "http://api.camelotherald.com/data/clusters/";

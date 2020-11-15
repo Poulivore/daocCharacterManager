@@ -23,7 +23,7 @@
 	</Menu>
 	<TabControl Name="MainTabControl" DockPanel.Dock="Bottom">
             <TabItem Header="General">
-                <ListView x:Name="characterListView">
+                <ListView x:Name="characterListView"  GridViewColumnHeader.Click="CharacterListViewColumHeader_Click">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -31,6 +31,8 @@
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Header="Class"  DisplayMemberBinding="{Binding ClassName}"/>
                             <GridViewColumn Header="Realm rank">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -52,8 +54,8 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Header="Class"  DisplayMemberBinding="{Binding ClassName}"/>
+                            <GridViewColumn Header="Kills"  DisplayMemberBinding="{Binding TotalKills}"/>
+                            <GridViewColumn Header="Solo kills"  DisplayMemberBinding="{Binding TotalSoloKills}"/>
                             <GridViewColumn Header="Server"  DisplayMemberBinding="{Binding ServerName}"/>
                         </GridView>
                     </ListView.View>

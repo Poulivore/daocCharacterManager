@@ -6,6 +6,8 @@ namespace daocCharacterManager {
         public string ServerName { get; set; }
         public string ClassName { get; set; }
         public int RealmPoints  { get; set; }
+        public int TotalKills  { get; set; }
+        public int TotalSoloKills  { get; set; }
 
         public Character() {
         }
