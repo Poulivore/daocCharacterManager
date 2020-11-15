@@ -48,3 +48,13 @@ steps:
     publishLocation: 'pipeline'
     
 
+
+- task: GitHubRelease@1
+  inputs:
+    gitHubConnection: Poulivore
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
